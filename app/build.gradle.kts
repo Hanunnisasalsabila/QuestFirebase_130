@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
     implementation(libs.coroutines.play.services)
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
 
 // navigasi
     implementation(libs.navigation.compose)
@@ -63,6 +64,7 @@ dependencies {
 // viewmodel
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.androidx.material3)
 
 
     testImplementation(libs.junit)

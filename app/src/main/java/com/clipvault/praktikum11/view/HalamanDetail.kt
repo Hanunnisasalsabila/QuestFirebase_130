@@ -75,5 +75,57 @@ fun DetailSiswaScreen(
                     contentDescription = stringResource(R.string.update),
                 )
             }
-        },
+        }, modifier = modifier
+    ) { innerPadding ->
+        val coroutineScope = rememberCoroutineScope()
+        BodyDetailDataSiswa(
+            statusUIDetail = viewModel.statusUIDetail,
+            onDelete = { coroutineScope.launch {
+                viewModel.hapusSatuSiswa()
+                navigateBack()
+            } },
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+        )
+    }
 }
+
+@Composable
+private fun BodyDetailDataSiswa(
+    statusUIDetail: StatusUIDetail,
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen
+            .padding_medium))
+    ) {
+        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+        when (statusUIDetail) {
+            is StatusUIDetail.Success -> DetailDataSiswa(
+                siswa = statusUIDetail.satusiswa,
+                modifier = Modifier.fillMaxWidth())
+            else -> {}
+        }
+        OutlinedButton(
+            onClick = { deleteConfirmationRequired = true },
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.delete))
+        }
+        if (deleteConfirmationRequired) {
+            DeleteConfirmationDialog(
+                onDeleteConfirm = {
+                    deleteConfirmationRequired = false
+                    onDelete()
+                },
+                onDeleteCancel = { deleteConfirmationRequired = false },
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
+            )
+        }
+    }
+}
+

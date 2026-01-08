@@ -19,7 +19,7 @@ import com.clipvault.praktikum11.view.route.DestinasiHome
 
 @Composable
 fun DataSiswaApp(navController: NavHostController = rememberNavController(), modifier:
-    Modifier) {
+Modifier) {
     HostNavigasi(navController = navController)
 }
 
@@ -30,8 +30,22 @@ fun HostNavigasi(
 ) {
     NavHost(navController = navController, startDestination = DestinasiHome.route, modifier
     = Modifier) {
-    composable(DestinasiHome.route) {
-        HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
-            navigateToItemUpdate = {
-                navController.navigate("${DestinasiDetail.route}/${it}")})
+        composable(DestinasiHome.route) {
+            HomeScreen(navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
+                navigateToItemUpdate = {
+                    navController.navigate("${DestinasiDetail.route}/${it}")})
+        }
+        composable(DestinasiEntry.route) {
+            EntrySiswaScreen(navigateBack = { navController.navigate(DestinasiHome.route) }
+            )
+        }
+        composable(DestinasiDetail.routeWithArgs, arguments = listOf(navArgument
+            (DestinasiDetail.itemIdArg) {
+            type = NavType.StringType })
+        ) {
+            DetailSiswaScreen(navigateToEditItem = {navController.navigate("${DestinasiEdit
+                .route}/$it")},
+                navigateBack = {navController.navigate(DestinasiHome.route) })
+        }
     }
+}

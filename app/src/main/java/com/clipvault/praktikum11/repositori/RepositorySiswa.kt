@@ -7,6 +7,9 @@ import kotlinx.coroutines.tasks.await
 interface RepositorySiswa {
     suspend fun getDataSiswa(): List<Siswa>
     suspend fun postDataSiswa(siswa: Siswa)
+    suspend fun getSatuSiswa(id: Long): Siswa?
+    suspend fun editSatuSiswa(id: Long, siswa: Siswa)
+    suspend fun hapusSatuSiswa(id: Long)
 }
 
 class FirebaseRepositorySiswa : RepositorySiswa {
@@ -30,7 +33,6 @@ class FirebaseRepositorySiswa : RepositorySiswa {
 
     override suspend fun postDataSiswa(siswa: Siswa) {
         val docRef = if (siswa.id == 0L) collection.document() else collection.document(siswa.id.toString())
-
         val data = hashMapOf(
             "id" to (siswa.id.takeIf { it != 0L } ?: docRef.id.hashCode()),
             "nama" to siswa.nama,
